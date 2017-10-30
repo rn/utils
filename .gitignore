@@ -13,6 +13,7 @@
 *.vhdx
 *.efi
 *.qcow2
+*.exe
 *-kernel
 *-cmdline
 *-state
