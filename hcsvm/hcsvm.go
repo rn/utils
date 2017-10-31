@@ -12,7 +12,7 @@ import (
 func main() {
 	imgPath := flag.String("dir", "C:\\Program Files\\Linux Containers", "Directory with initrd.img and bootx64.efi")
 	name := flag.String("name", "", "Name of the VM (default a UUID v4)")
-	extraCmdLine := flag.String("cmdline", "", "Additional kernel command line arguments")
+	cmdLine := flag.String("cmdline", "console=ttyS0", "Kernel command line arguments")
 	createTimeout := flag.Duration("timeout", 10*time.Second, "Timeout for VM creation")
 
 	flag.Parse()
@@ -21,18 +21,13 @@ func main() {
 		*name = uuid.NewV4().String()
 	}
 
-	cmdLine := "console=ttyS0"
-	if *extraCmdLine != "" {
-		cmdLine = cmdLine + " " + *extraCmdLine
-	}
-
 	logrus.SetLevel(logrus.DebugLevel)
 
 	runtimeCfg := &hcsshim.HvRuntime{
 		ImagePath:           *imgPath,
 		LinuxInitrdFile:     "initrd.img",
 		LinuxKernelFile:     "bootx64.efi",
-		LinuxBootParameters: cmdLine,
+		LinuxBootParameters: *cmdLine,
 	}
 
 	vmCfg := &hcsshim.ContainerConfig{
