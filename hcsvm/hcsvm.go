@@ -40,7 +40,7 @@ func main() {
 		HvRuntime: runtimeCfg,
 	}
 
-	logrus.Info("Create VM: %s", *name)
+	logrus.Infof("Create VM: %s", *name)
 
 	// XXX For some reason, the CreateContainer just hangs (and
 	// then times out after 240s). The VM boots up, but then there
@@ -69,6 +69,6 @@ func main() {
 		return
 	}
 
-	logrus.Info("Waiting to terminate")
+	logrus.Info("Waiting to finish")
 	vm.Wait()
 }
