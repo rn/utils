@@ -1,0 +1,361 @@
+#! /usr/bin/env python
+#
+# Copyright 2014-2016 Rolf Neugebauer
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+"""A stack based class and utility implementing a simple Reverse
+Polish Notation based calculator.  The output is in dec, hex and
+binary for programmers."""
+
+import sys
+import cmd
+from collections import OrderedDict
+
+_MAX32 = 0xffffffff
+_MAX64 = 0xffffffffffffffff
+_LEN_INT32 = len("%d" % _MAX32)
+_LEN_HEX32 = len("%x" % _MAX32)
+_LEN_INT64 = len("%d" % _MAX64)
+_LEN_HEX64 = len("%x" % _MAX64)
+
+
+def _bit_len(int_num):
+    """Calculate the length of an integer in bits, i.e. the highest
+    bit set to 1.
+
+    @param int_num: number to test.
+    @returns number of bits used by number.
+    """
+    length = 0
+    while int_num:
+        int_num >>= 1
+        length += 1
+    return length
+
+
+def _int2bin(num, count=24):
+    """Returns the binary of integer n, using count number of
+    digits. Also insert underscores every nibble for better
+    readability."""
+    tmp_s = "".join([str((num >> y) & 1) for y in range(count - 1, -1, -1)])
+    res = ""
+    rem = len(tmp_s) % 4
+    res = tmp_s[0:rem]
+    tmp_s = tmp_s[rem:]
+    while len(tmp_s):
+        res += '_' + tmp_s[0:4]
+        tmp_s = tmp_s[4:]
+    return res.strip('_')
+
+
+def _str2num(instr):
+    """Convert a string to a number. Strip any '_' from them"""
+    tmp_s = instr.replace('_', '')
+    if '.' in tmp_s:
+        return float(tmp_s)
+    else:
+        return int(tmp_s, 0)
+
+
+def _pp_list(nums):
+    """Pretty print a list of numbers.
+
+    Each number is printed on it's own line. Positive integers are
+    printed in dec, hex, and binary. Negative integers and floats are
+    only printed in decimal.
+    """
+
+    # work out largest number and highest bit for formatting
+    print64 = False
+    max_bit = 0
+    for num in nums:
+        if num < 0:
+            continue
+        if type(num) == float:
+            continue
+        if num > _MAX32:
+            print64 = True
+        high_bit = _bit_len(num)
+        if high_bit > max_bit:
+            max_bit = high_bit
+
+    i = 0
+    for num in nums:
+        if type(num) == float:
+            if print64:
+                print("[%02d] %20f" % (i, num))
+            else:
+                print("[%02d] %10f" % (i, num))
+        elif num < 0:
+            if print64:
+                print("[%02d] %20d" % (i, num))
+            else:
+                print("[%02d] %10d" % (i, num))
+        elif print64:
+            print("[%02d] %20d    %0#18x    0b%s" %
+                  (i, num, num, _int2bin(num, max_bit)))
+        else:
+            print("[%02d] %10d    %0#10x    0b%32s" %
+                  (i, num, num, _int2bin(num, 32)))
+        i += 1
+
+
+class StackCalc(object):
+    """A class implementing a stack based calculator"""
+
+    def __init__(self):
+        self.stack = []
+
+    def clear(self):
+        """Clear the stack"""
+        self.stack = []
+
+    def push(self, item):
+        """Push the number onto the stack"""
+        self.stack.append(item)
+
+    def pop(self):
+        """Pop the top element of the stack"""
+        return self.stack.pop()
+
+    def top(self, num=1):
+        """Return the top 'n' element from the stack without popping it"""
+        return self.stack[-num:]
+
+    def dup(self):
+        """Duplicate the top element"""
+        self.push(self.top())
+
+    def swap(self):
+        """Swap the top to elements"""
+        tmp1 = self.pop()
+        tmp2 = self.pop()
+        self.push(tmp1)
+        self.push(tmp2)
+
+    def add(self):
+        """Add: Pop two elements, push [2] + [1]."""
+        tmp = self.pop()
+        self.push(self.pop() + tmp)
+
+    def sub(self):
+        """Subtract: Pop two elements, push [2] - [1]."""
+        tmp = self.pop()
+        self.push(self.pop() - tmp)
+
+    def mul(self):
+        """Multiply: Pop two elements, push [2] * [1]."""
+        tmp = self.pop()
+        self.push(self.pop() * tmp)
+
+    def div(self):
+        """Divide: Pop two elements, push [2] / [1]."""
+        tmp = self.pop()
+        self.push(self.pop() / tmp)
+
+    def remainder(self):
+        """Remainder: Pop two elements, push [2] % [1]."""
+        tmp = self.pop()
+        self.push(self.pop() % tmp)
+
+    def pow(self):
+        """Power: Pop two elements, push [2] ** [1]."""
+        tmp = self.pop()
+        self.push(self.pop() ** tmp)
+
+    def lshift(self):
+        """Left shift: Pop two elements, push [2] << [1]."""
+        if type(self.stack[0]) == float or type(self.stack[1]) == float:
+            print("Can't shift with floats")
+            return
+        tmp = self.pop()
+        self.push(self.pop() << tmp)
+
+    def rshift(self):
+        """Right shift: Pop two elements, push [2] << [1]."""
+        if type(self.stack[0]) == float or type(self.stack[1]) == float:
+            print("Can't shift with floats")
+            return
+        tmp = self.pop()
+        self.push(self.pop() >> tmp)
+
+    def bor(self):
+        """Binary OR: Pop two elements, push [2] | [1]."""
+        if type(self.stack[0]) == float or type(self.stack[1]) == float:
+            print("Can't OR with floats")
+            return
+        tmp = self.pop()
+        self.push(self.pop() | tmp)
+
+    def band(self):
+        """Binary AND: Pop two elements, push [2] & [1]."""
+        if type(self.stack[0]) == float or type(self.stack[1]) == float:
+            print("Can't AND with floats")
+            return
+        tmp = self.pop()
+        self.push(self.pop() & tmp)
+
+    def bxor(self):
+        """Binary XOR: Pop two elements, push [2] ^ [1]."""
+        if type(self.stack[0]) == float or type(self.stack[1]) == float:
+            print("Can't XOR with floats")
+            return
+        tmp = self.pop()
+        self.push(self.pop() ^ tmp)
+
+    def bcompl(self):
+        """Binary Complement: Pop one element, push ~[1]."""
+        if type(self.stack[0]) == float:
+            print("Can't compute binary complement for a float")
+            return
+        self.push(~self.pop())
+
+
+class RPNCalc(StackCalc):
+    """Class implementing the RPN calculator"""
+
+    def __init__(self):
+        StackCalc.__init__(self)
+
+        # Map command strings to methods. None entries are sections for help
+        cmds = [
+            ('Stack Operations:', None),
+            ('p[n]', self.prn),
+            ('t', self.prtop),
+            ('pop', self.pop),
+            ('.', self.dpop),
+            ('swap', self.swap),
+            ('clear', self.clear),
+
+            ('Arithmetic Operations:', None),
+            ('+', self.add),
+            ('-', self.sub),
+            ('*', self.mul),
+            ('/', self.div),
+            ('%', self.remainder),
+            ('**', self.pow),
+
+            ('Binary Operations', None),
+            ('<<', self.lshift),
+            ('>>', self.rshift),
+            ('|', self.bor),
+            ('&', self.band),
+            ('^', self.bxor),
+            ('~', self.bcompl),
+
+            ('Help', None),
+            ('h', self.help),
+            ('?', self.help),
+            ]
+
+        self._cmds = OrderedDict(cmds)
+
+        # a list of commands which don't case a default print of top
+        self._nopr = [self.prn, self.prtop, self.dpop, self.clear, self.help]
+
+    def help(self):
+        """Print this message"""
+        for command in self._cmds:
+            doc = self._cmds[command].__doc__
+            if not doc:
+                print("\n%s" % command)
+            else:
+                print("%-5s: %s" % (command, doc))
+
+    def prn(self, num=1):
+        """Print the top [num] elements. Default 1"""
+        # reverse list for better readability as a stack
+        _pp_list(self.top(num)[::-1])
+
+    def prtop(self):
+        """Print the top element."""
+        self.prn()
+
+    def dpop(self):
+        """Pop and element and print it"""
+        _pp_list([self.pop()])
+        return
+
+    def execute(self, line, interactive=True):
+        """Execute the commands in the passed in string"""
+        last_cmd = None
+        for tok in line.split():
+            if tok in self._cmds:
+                self._cmds[tok]()
+                last_cmd = self._cmds[tok]
+            elif tok.startswith('p'):
+                # special handling for print command
+                num = 1 if len(tok) == 1 else int(tok[1:])
+                self.prn(num)
+                last_cmd = self.prn
+            else:
+                # must be a number
+                self.push(_str2num(tok))
+                last_cmd = None
+
+        if not interactive:
+            self.prn(1000)   # Print the "whole" stack when not interactive
+        elif last_cmd not in self._nopr:
+            self.prn()
+
+
+class _RPNCalcShell(cmd.Cmd):
+    """Simple helper to use the Python command module"""
+    intro = 'Welcome to the RPNCalc. Type help or ? to list commands.\n'
+    prompt = ''
+    file = None
+    use_rawinput = True
+
+    def __init__(self):
+        cmd.Cmd.__init__(self)
+        self.calc = RPNCalc()
+
+    def do_help(self, _):
+        """cmd.help implementation"""
+        self.calc.help()
+
+    def default(self, line):
+        """Override cmd.default() to interpret the command line"""
+        try:
+            self.calc.execute(line)
+        except (KeyboardInterrupt, EOFError):
+            sys.stdout.write("\n")
+            sys.stdout.flush()
+            sys.exit(0)
+        except Exception:
+            print("Error in expression: "+line)
+            exinfo = sys.exc_info()
+            print(str(exinfo[0]))
+            print(sys.exc_info())
+
+
+def rpncalc(argv):
+    """Main entry function. support arguments or interactive mode"""
+    if len(argv) > 1:
+        calc = RPNCalc()
+        try:
+            argstr = ' '.join(argv[1:])
+            calc.execute(argstr, False)
+        except:
+            return 1
+        return 0
+
+    # Interactive mode
+    _RPNCalcShell().cmdloop()
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(rpncalc(sys.argv))
