@@ -1,15 +1,16 @@
 #! /usr/bin/env python
-# -*- Python -*-
-#
-# Set various EXIF tags for scanned photos/negatives using exiftool
 
-import sys, getopt, subprocess, os
+"""Set various EXIF tags for scanned photos/negatives using exiftool"""
+
+import getopt
+import subprocess
+import sys
 
 # Disable bad whitespace warning
 # pylint: disable=C0326
 
-# For each camera list 'Make' and 'Model' for EXIF data
-cameras = {
+# Camera 'Make' and 'Model' for EXIF data
+CAMERAS = {
     1: ["Leica", "Leica M7"],
     2: ["Zeiss", "Zeiss Ikon ZM"],
     3: ["Yashica", "Yashica-Mat"],
@@ -19,8 +20,8 @@ cameras = {
     7: ["Olympus", "Olympus-35 SP"],
     }
 
-# for each lens list 'Lens' for EXIF data
-lenses = {
+# Lens name and focal length
+LENSES = {
     1: ["Zeiss Biogon 2/35 ZM", "35"],
     2: ["Leica Summicron-M 1:2/50", "50"],
     3: ["Leitz Tele-Elmarit-M 1:2.8/90", "90"],
@@ -33,8 +34,8 @@ lenses = {
     10: ["Vivitar MC Macro Focusing Zoom 70-210mm 1:4.4-5.6", "unknown"],
     }
 
-# for each film, list "ISO" and Film description and Negative inscription
-films = [
+# Film "ISO" and Film description and Negative inscription
+FILMS = [
     ["400",  "Kodak TRI-X 400", ""],
     ["400",  "Kodak T-MAX 400", "TMY 5053"],
     ["100",  "Kodak T-MAX 100", ""],
@@ -70,32 +71,36 @@ films = [
     ["50",   "Agfa Ultra 50", ""],
     ]
 
-exiftool = "exiftool -overwrite_original"
+EXIFTOOL = "exiftool -overwrite_original"
 et_opt = ""
 
-def print_cams():
-    ks = cameras.keys()
+def print_cameras():
+    """Print a list of known cameras"""
+    ks = CAMERAS.keys()
     ks.sort()
     print "Supported Camera Models:"
     print "Index Manufacturer Model"
     for k in ks:
-        print "%5d %-12s %s" % (k, cameras[k][0], cameras[k][1])
+        print "%5d %-12s %s" % (k, CAMERAS[k][0], CAMERAS[k][1])
 
 def print_lenses():
-    ls = lenses.keys()
+    """Print a list of known lenses"""
+    ls = LENSES.keys()
     ls.sort()
     print "Supported Lens Models:"
     print "Index Lens"
     for l in ls:
-        print "%5d %s" % (l, lenses[l][0])
+        print "%5d %s" % (l, LENSES[l][0])
 
 def print_films():
+    """Print a list of known films"""
     print "Supported Films:"
     print "Index  ISO Description"
-    for f in films:
-        print "%5d %-4s %-30s %s" % (films.index(f) + 1, f[0], f[1], f[2])
+    for f in FILMS:
+        print "%5d %-4s %-30s %s" % (FILMS.index(f) + 1, f[0], f[1], f[2])
 
 def usage():
+    """Print usage"""
     print "scan-exif.py [-c <n>|h] [-l <n>|h] [-f <n>|h] <files>"
     print "Munge exif data from scanned negatives"
     print "-c <n>: Set Camera Model. h for list of cameras"
@@ -111,11 +116,11 @@ if __name__ == "__main__":
     camera = 0
     lens = 0
     film = 0
-    f_iso = 0
+    f_iso = ""
     iso = 0
     date = None
     hour = 12
-    min = 0
+    minute = 0
     aperture = None
 
     opts, files = getopt.getopt(sys.argv[1:], arglist, [])
@@ -126,7 +131,7 @@ if __name__ == "__main__":
                 sys.exit()
             if opt[0] == '-c':
                 if opt[1] == 'h':
-                    print_cams()
+                    print_cameras()
                     sys.exit()
                 else:
                     camera = int(opt[1])
@@ -149,50 +154,50 @@ if __name__ == "__main__":
             if opt[0] == '-t':
                 h_s, _, m_s = opt[1].partition(':')
                 hour = int(h_s)
-                min = int(m_s)
+                minute = int(m_s)
             if opt[0] == '-a':
                 aperture = float(opt[1])
     except:
         raise
 
     if not camera == 0:
-        c_man = cameras[camera][0]
-        c_mod = cameras[camera][1]
+        c_man = CAMERAS[camera][0]
+        c_mod = CAMERAS[camera][1]
         et_opt += ' -Make=%s -Model="%s"' % (c_man, c_mod)
 
     if not lens == 0:
-        l_desc = lenses[lens][0]
-        l_foc = lenses[lens][1]
+        l_desc = LENSES[lens][0]
+        l_foc = LENSES[lens][1]
         et_opt += ' -Lens="%s"' % (l_desc)
         et_opt += ' -FocalLength="%s"' % (l_foc)
 
     if not film == 0:
-        f_iso = films[film - 1][0]
-        f_desc = films[film - 1][1]
+        f_iso = FILMS[film - 1][0]
+        f_desc = FILMS[film - 1][1]
         et_opt += ' -HierarchicalSubject+="Film|%s"' % f_desc
 
     if not iso == 0:
         et_opt += " -ISO=%s" % iso
-    elif not f_iso == 0:
+    elif not f_iso == "":
         et_opt += " -ISO=%s" % f_iso
 
     if aperture:
         et_opt += ' -FNumber=%.1f' % aperture
 
 
-    for file in files:
+    for infile in files:
 
         et_opt_cur = et_opt
         if date:
             et_opt_cur += ' -DateTimeOriginal="%s %02d:%02d:00"' % \
-                          (date, hour, min)
+                          (date, hour, minute)
             et_opt_cur += ' -CreateDate="%s %02d:%02d:00"' % \
-                          (date, hour, min)
-            min += 1
-            if min >= 60:
+                          (date, hour, minute)
+            minute += 1
+            if minute >= 60:
                 hour += 1
-                min = 0
+                minute = 0
 
-        cmd = "%s%s %s" % (exiftool, et_opt_cur, file)
+        cmd = "%s%s %s" % (EXIFTOOL, et_opt_cur, infile)
         print cmd
         subprocess.call(cmd, shell=True)
