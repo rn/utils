@@ -1,6 +1,8 @@
 This is a repository where I dump miscellaneous utilities and other
 code. Some of it is work in progress.
 
+- [`photo`](./photo): A collection of scripts to manage meta-data and
+  other things for scanned films/photos.
 - [`rpncalc`](./rpncalc): A text based calculator (written in Python),
   which uses Reverse Polish Notation (like HP pocket
   calculators). It's also handy for low level work as it prints
