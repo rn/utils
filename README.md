@@ -1,6 +1,8 @@
 This is a repository where I dump miscellaneous utilities and other
 code. Some of it is work in progress.
 
+- [`crossvm`](./crossvm): Dockerfile/Makefile to compile
+  [`crosvm`](https://chromium.googlesource.com/chromiumos/platform/crosvm/).
 - [`photo`](./photo): A collection of scripts to manage meta-data and
   other things for scanned films/photos.
 - [`rpncalc`](./rpncalc): A text based calculator (written in Python),
