@@ -9,6 +9,7 @@ code. Some of it is work in progress.
   which uses Reverse Polish Notation (like HP pocket
   calculators). It's also handy for low level work as it prints
   numbers in decimal, hex, and binary.
+- [`mdv`](./mdv): A super simple text markdown viewer.
 - [`hcsvm`](./win-hcsvm): A WIP go based utility to start Linux VMs on
   Hyper-V using the Host Compute Service (HCS). HCS is used to spin up
   Utility/Service VMs for containers on Windows 10 Pro and Windows
