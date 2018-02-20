@@ -69,6 +69,7 @@ FILMS = [
     ["200",  "Agfa XRG 200", ""],
     ["125",  "Agfa Optima 125", ""],
     ["50",   "Agfa Ultra 50", ""],
+    ["40",   "Agfa Leverkusen Isopan F", "AGFA L IF"],
     ]
 
 EXIFTOOL = "exiftool -overwrite_original"
