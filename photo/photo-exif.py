@@ -66,6 +66,7 @@ FILMS = [
     ["100",  "Kodak Gold 100-2", ""],
     ["200",  "Kodak Gold 200-2", "GB 6096 or GB 7304"],
     ["160",  "Kodak Portra 160VC", "160-VC2"],
+    ["100",  "Kodak Color II 100", "Kodak Safety 5053"],
     ["200",  "Agfa XRG 200", ""],
     ["125",  "Agfa Optima 125", ""],
     ["50",   "Agfa Ultra 50", ""],
