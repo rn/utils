@@ -10,10 +10,6 @@ code. Some of it is work in progress.
   calculators). It's also handy for low level work as it prints
   numbers in decimal, hex, and binary.
 - [`mdv`](./mdv): A super simple text markdown viewer.
-- [`hcsvm`](./win-hcsvm): A WIP go based utility to start Linux VMs on
-  Hyper-V using the Host Compute Service (HCS). HCS is used to spin up
-  Utility/Service VMs for containers on Windows 10 Pro and Windows
-  Server 2016.
 - [`npterm`](./win-npterm): A simple terminal utility (written in Go)
   which connects to a Named Pipe. It optionally logs all output to a
   file. I use this for serial console access to Hyper-V VMs.
