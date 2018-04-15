@@ -200,6 +200,6 @@ if __name__ == "__main__":
                 hour += 1
                 minute = 0
 
-        cmd = "%s%s %s" % (EXIFTOOL, et_opt_cur, infile)
+        cmd = "%s%s '%s'" % (EXIFTOOL, et_opt_cur, infile)
         print cmd
         subprocess.call(cmd, shell=True)
