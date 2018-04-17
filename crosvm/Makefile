@@ -1,7 +1,8 @@
 .PHONY: extract
 extract: iid
-	docker run --rm $(shell cat iid) | tar xf -
+	mkdir -p ./build
+	docker run --rm $(shell cat iid) | tar xf - -C ./build
 	rm iid
 
-iid:
+iid: Makefile Dockerfile
 	docker build --no-cache --iidfile iid .

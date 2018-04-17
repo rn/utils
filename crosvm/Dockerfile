@@ -29,7 +29,8 @@ RUN cargo build --release
     
 RUN mkdir /out && \
     cp /minijail/libminijail.so /out && \
-    cp /crosvm/target/release/crosvm /out/crosvm
+    cp /crosvm/target/release/crosvm /out && \
+    cp -r /crosvm/seccomp /out
 
 WORKDIR /out
-ENTRYPOINT ["tar", "cf", "-", "libminijail.so", "crosvm" ]
+ENTRYPOINT ["tar", "cf", "-", "libminijail.so", "crosvm", "seccomp"]
