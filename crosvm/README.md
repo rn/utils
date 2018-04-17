@@ -1,13 +1,16 @@
 The Chrome OS Virtual Machine Monitor
 [`crosvm`](https://chromium.googlesource.com/chromiumos/platform/crosvm/)
-is a lightweight VMM written in Rust. It runs on top of KVM.
+is a lightweight VMM written in Rust. It runs on top of KVM and
+optionally runs the device models in separate processes isolated with
+seccomp profiles.
+
 
 ## Build/Install
 
 The `Makefile` and `Dockerfile` compile `crosvm` and a suitable
 version of `libminijail`. To build:
 
-```
+```sh
 make
 ```
 
@@ -16,7 +19,8 @@ well as the seccomp profiles in `./build`. Copy `libminijail.so` to
 `/usr/lib` or wherever `ldd` picks it up. You may also need `libcap`
 (on Ubuntu or Debian `apt-get install -y libcap-dev`).
 
-You may also have to create an empty directory `/var/empty`
+You may also have to create an empty directory `/var/empty`.
+
 
 ## Use with LinuxKit images
 
@@ -44,7 +48,7 @@ trust:
 
 run:
 
-```
+```sh
 linuxkit build -output kernel+squashfs minimal.yml
 ```
 
@@ -53,7 +57,7 @@ The kernel this produces (`minimal-kernel`) needs to be converted as
 image with
 [extract-vmlinux](https://raw.githubusercontent.com/torvalds/linux/master/scripts/extract-vmlinux):
 
-```
+```sh
 extract-vmlinux minimal-kernel > minimal-vmlinux
 ```
 
@@ -66,7 +70,6 @@ Then you can run `crosvm`:
     --socket ./linuxkit-socket \
     minimal-vmlinux
 ```
-
 
 Some known issues:
 - With 4.14.x, a `BUG_ON()` is hit in `drivers/base/driver.c`. 4.9.x
