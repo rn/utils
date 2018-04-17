@@ -1,0 +1,34 @@
+kernel:
+  image: linuxkit/kernel:4.14.34
+  cmdline: "console=tty0 console=ttyS0 console=ttyAMA0"
+init:
+  - linuxkit/init:v0.3
+  - linuxkit/runc:v0.3
+  - linuxkit/containerd:v0.3
+  - linuxkit/ca-certificates:v0.3
+onboot:
+  - name: sysctl
+    image: linuxkit/sysctl:v0.3
+  - name: dhcpcd
+    image: linuxkit/dhcpcd:v0.3
+    command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
+services:
+  - name: getty
+    image: linuxkit/getty:v0.3
+    env:
+     - INSECURE=true
+  - name: rngd
+    image: linuxkit/rngd:v0.3
+  - name: dhcpcd2
+    image: linuxkit/dhcpcd:v0.3
+  - name: dnscrypt-proxy
+    image: rneugeba/dnscrypt-proxy:dev
+files:    
+  - path: var/log/dnsproxy
+    directory: true
+  - path: etc/linuxkit-config
+    metadata: yaml
+trust:
+  org:
+    - linuxkit
+    - library
