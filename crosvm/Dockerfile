@@ -6,7 +6,7 @@ ENV MINIJAIL_REPO=https://android.googlesource.com/platform/external/minijail
 ENV MINIJAIL_COMMIT=d45fc420bb8fd9d1fc9297174f3c344db8c20bbd
 
 # Install deps
-RUN apt-get update && apt-get install -y libcap-dev
+RUN apt-get update && apt-get install -y libcap-dev libfdt-dev
 
 # Get source code
 RUN git clone ${MINIJAIL_REPO} && \
