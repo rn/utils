@@ -71,10 +71,15 @@ Then you can run `crosvm`:
     minimal-vmlinux
 ```
 
-Some known issues:
+## Known issues
+
 - With 4.14.x, a `BUG_ON()` is hit in `drivers/base/driver.c`. 4.9.x
   kernels seem to work.
 - Networking does not yet work, so don't include a `onboot` `dhcpd` service.
 - `poweroff` from the command line does not work (crosvm does not seem
   to support ACPI). So to stop a VM you can use the control socket
   and: `./crosvm stop ./linuxkit-socket`
+- `crosvm` and its dependencies compile on `arm64` but `crosvm` seems
+  to lack support for setting op the IRQ chip on the system I
+  tested. I got: `failed to create in-kernel IRQ chip:
+  CreateGICFailure(Error(19))`.
