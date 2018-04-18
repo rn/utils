@@ -58,11 +58,25 @@ cache_max_ttl = 86400
 #        Servers        #
 #########################
 
+[static.'cloudflare']
+  stamp = 'sdns://AgcAAAAAAAAABzEuMC4wLjGgENk8mGSlIfMGXMOlIlCcKvq7AVgcrZxtjon911-ep0cg63Ul-I8NlFj4GplQGb_TTLiczclX57DvMV8Q-JdjgRgSZG5zLmNsb3VkZmxhcmUuY29tCi9kbnMtcXVlcnk'
 [static.'de.dnsmaschine.net']
   stamp = 'sdns://AQcAAAAAAAAAEzIwOS4yNTAuMjM1LjE3MDo0NDMgz0wbvISl_NVCSe0wDJMS79BAFZoWth1djmhuzv_n3KAiMi5kbnNjcnlwdC1jZXJ0LmRlLmRuc21hc2NoaW5lLm5ldA'
 [static.'dnscrypt.ca-1']
   stamp = 'sdns://AQcAAAAAAAAAFDE5OS4xNjcuMTMwLjExODo1MzUzIHT3RVUXvCb3EXflbXKTJ4hscpFbP0YoMD-RDEfDjoJ5HTIuZG5zY3J5cHQtY2VydC5kbnNjcnlwdC5jYS0x'
 [static.'dnscrypt.eu-nl']
   stamp = 'sdns://AQcAAAAAAAAADjE3Ni41Ni4yMzcuMTcxIGfADywhxVSBRd18tGonGvLrlpkxQKMJtiuNFlMRhZxmJTIuZG5zY3J5cHQtY2VydC5yZXNvbHZlcjEuZG5zY3J5cHQuZXU'
-[static.'cloudflare']
-  stamp = 'sdns://AgcAAAAAAAAABzEuMC4wLjGgENk8mGSlIfMGXMOlIlCcKvq7AVgcrZxtjon911-ep0cg63Ul-I8NlFj4GplQGb_TTLiczclX57DvMV8Q-JdjgRgSZG5zLmNsb3VkZmxhcmUuY29tCi9kbnMtcXVlcnk'
+[static.'bn-nl0']
+  stamp = 'sdns://AQYAAAAAAAAAEzg3LjI1My4xNTIuMTkwOjUzNTMgh5QHChQ9NcocpjLnsYkwKE6uXa_rtAHj31Lp8Der0YIfMi5kbnNjcnlwdC1jZXJ0LmJhYnlsb24ubmV0d29yaw'
+[static.'dnscrypt.me']
+  stamp = 'sdns://AQcAAAAAAAAADjE5NS4yMDEuMTI4LjM2IAPy8MAulkBuCJ__WO6mLMk3zjMHoJl24KZAd3z59w4CGzIuZG5zY3J5cHQtY2VydC5kbnNjcnlwdC5tZQ'
+[static.'ev-us']
+  stamp = 'sdns://AQcAAAAAAAAADzEwNC4xNTYuMjUzLjExMyDnaC_jr-UyTXQYQ8OkLyMQ5lhGKZas3QyMC0tati69MB0yLmRuc2NyeXB0LWNlcnQuZXZpbHZpYmVzLmNvbQ'
+[static.'ev-us2']
+  stamp = 'sdns://AQcAAAAAAAAADjE0NC4yMDIuMTUuMTMxIKLp-jrtojXjQzK9muKwWgO0lqJSmO0zpghDgjMIytQiHTIuZG5zY3J5cHQtY2VydC5ldmlsdmliZXMuY29t'
+[static.'securedns']
+  stamp = 'sdns://AQcAAAAAAAAAEzE0Ni4xODUuMTY3LjQzOjUzNTMgs6WXaRRXWwSJ4Z-unEPmefryjFcYlwAxf3u0likfsJUcMi5kbnNjcnlwdC1jZXJ0LnNlY3VyZWRucy5ldQ'
+[static.'scaleway']
+  stamp = 'sdns://AQcAAAAAAAAADjIxMi40Ny4yMjguMTM2IOgBuE6mBr-wusDOQ0RbsV66ZLAvo8SqMa4QY2oHkDJNHzIuZG5zY3J5cHQtY2VydC5mci5kbnNjcnlwdC5vcmc'
+
+
