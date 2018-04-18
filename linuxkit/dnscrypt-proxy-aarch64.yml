@@ -1,5 +1,8 @@
 kernel:
-  image: linuxkit/kernel:4.14.34
+  # image: linuxkit/kernel:4.14.34
+  # Use a 4.9.x kernel on RPi3 as the serial is different/
+  # currently broken with 4.14: https://github.com/linuxkit/linuxkit/issues/3008
+  image: linuxkit/kernel:4.9.89
   cmdline: "console=tty0 console=ttyAMA0"
 init:
   - linuxkit/init:v0.3
