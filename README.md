@@ -3,6 +3,8 @@ code. Some of it is work in progress.
 
 - [`crosvm`](./crosvm): Dockerfile/Makefile to compile
   [`crosvm`](https://chromium.googlesource.com/chromiumos/platform/crosvm/).
+- [`dnscrypt-proxy`](./dnscrypt-proxy): A linuxKit image for the RPi3
+  to run a DNS proxy (to encrypt/block DNS queries) in your home network.
 - [`photo`](./photo): A collection of scripts to manage meta-data and
   other things for scanned films/photos.
 - [`rpncalc`](./rpncalc): A text based calculator (written in Python),
