@@ -50,9 +50,9 @@ cache_max_ttl = 86400
   log_format = 'tsv'
 
 [whitelist]
-  # whitelist_file = 'whitelist.txt'
-  # log_file = 'whitelisted.log'
-  # log_format = 'tsv'
+  whitelist_file = '/etc/dnscrypt-whitelist.txt'
+  log_file = '/var/log/dnscrypt/whitelisted.log'
+  log_format = 'tsv'
 
 #########################
 #        Servers        #

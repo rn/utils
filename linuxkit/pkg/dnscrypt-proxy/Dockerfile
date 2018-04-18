@@ -27,5 +27,6 @@ COPY --from=build /dnscrypt-proxy /usr/bin/dnscrypt-proxy
 COPY /resolv.conf /etc/resolv.conf
 COPY /dnscrypt-proxy.toml /etc/dnscrypt-proxy.toml
 COPY /dnscrypt-blacklist.txt /etc/dnscrypt-blacklist.txt
+COPY /dnscrypt-whitelist.txt /etc/dnscrypt-whitelist.txt
 
 ENTRYPOINT [ "/usr/bin/dnscrypt-proxy", "-config", "/etc/dnscrypt-proxy.toml" ]
