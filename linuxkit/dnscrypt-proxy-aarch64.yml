@@ -25,7 +25,7 @@ services:
   - name: dhcpcd2
     image: linuxkit/dhcpcd:v0.3
   - name: dnscrypt-proxy
-    image: rneugeba/dnscrypt-proxy:dev
+    image: dnscrypt/dnscrypt-proxy:dev
 files:    
   - path: var/log/dnsproxy
     directory: true
