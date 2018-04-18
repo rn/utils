@@ -1,6 +1,6 @@
 kernel:
   image: linuxkit/kernel:4.14.34
-  cmdline: "console=tty0 console=ttyS0 console=ttyAMA0"
+  cmdline: "console=tty0 console=ttyAMA0"
 init:
   - linuxkit/init:v0.3
   - linuxkit/runc:v0.3
@@ -9,6 +9,9 @@ init:
 onboot:
   - name: sysctl
     image: linuxkit/sysctl:v0.3
+  - name: netdev
+    image: linuxkit/modprobe:v0.3
+    command: ["modprobe", "smsc95xx"]
   - name: dhcpcd
     image: linuxkit/dhcpcd:v0.3
     command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
