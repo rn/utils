@@ -1,6 +1,6 @@
 FROM linuxkit/alpine:f3cd219615428b2bd943411723eb28875275fae7 as build
 
-RUN apk add --no-cache go git musl-dev python3
+RUN apk add --no-cache go git musl-dev
 
 ENV GOPATH=/go PATH=$PATH:/go/bin
 ENV GITREPO=github.com/jedisct1/dnscrypt-proxy
