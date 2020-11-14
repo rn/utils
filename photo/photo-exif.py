@@ -67,10 +67,14 @@ FILMS = [
     ["200",  "Kodak Gold 200-2", "GB 6096 or GB 7304"],
     ["160",  "Kodak Portra 160VC", "160-VC2"],
     ["100",  "Kodak Color II 100", "Kodak Safety 5053"],
+    ["40",   "Agfacolor CN 17", ""],
+    ["80",   "Agfacolor Special CNS", ""],
+    ["80",   "Agfacolor Special CNS2", ""],
     ["200",  "Agfa XRG 200", ""],
     ["125",  "Agfa Optima 125", ""],
     ["50",   "Agfa Ultra 50", ""],
     ["40",   "Agfa Leverkusen Isopan F", "AGFA L IF"],
+    ["100",   "Agfa Isopan SS", "AGFA ISS"],
     ]
 
 EXIFTOOL = "exiftool -overwrite_original"
