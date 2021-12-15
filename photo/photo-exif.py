@@ -107,8 +107,8 @@ def print_films():
 
 def usage():
     """Print usage"""
-    print "scan-exif.py [-c <n>|h] [-l <n>|h] [-f <n>|h] <files>"
-    print "Munge exif data from scanned negatives"
+    print "photo-exif.py [-c <n>|h] [-l <n>|h] [-f <n>|h] <files>"
+    print "Munge exif data from photos, mostly scanned negatives"
     print "-c <n>: Set Camera Model. h for list of cameras"
     print "-l <n>: Set Lens. h for list of lenses"
     print "-f <n>: Set Films and ISO. h for list of films"
