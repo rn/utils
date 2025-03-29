@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 """Set various EXIF tags for scanned photos/negatives using exiftool"""
 
@@ -84,38 +84,38 @@ def print_cameras():
     """Print a list of known cameras"""
     ks = CAMERAS.keys()
     ks.sort()
-    print "Supported Camera Models:"
-    print "Index Manufacturer Model"
+    print("Supported Camera Models:")
+    print("Index Manufacturer Model")
     for k in ks:
-        print "%5d %-12s %s" % (k, CAMERAS[k][0], CAMERAS[k][1])
+        print ("%5d %-12s %s" % (k, CAMERAS[k][0], CAMERAS[k][1]))
 
 def print_lenses():
     """Print a list of known lenses"""
     ls = LENSES.keys()
     ls.sort()
-    print "Supported Lens Models:"
-    print "Index Lens"
+    print("Supported Lens Models:")
+    print("Index Lens")
     for l in ls:
-        print "%5d %s" % (l, LENSES[l][0])
+        print("%5d %s" % (l, LENSES[l][0]))
 
 def print_films():
     """Print a list of known films"""
-    print "Supported Films:"
-    print "Index  ISO Description"
+    print("Supported Films:")
+    print("Index  ISO Description")
     for f in FILMS:
-        print "%5d %-4s %-30s %s" % (FILMS.index(f) + 1, f[0], f[1], f[2])
+        print("%5d %-4s %-30s %s" % (FILMS.index(f) + 1, f[0], f[1], f[2]))
 
 def usage():
     """Print usage"""
-    print "photo-exif.py [-c <n>|h] [-l <n>|h] [-f <n>|h] <files>"
-    print "Munge exif data from photos, mostly scanned negatives"
-    print "-c <n>: Set Camera Model. h for list of cameras"
-    print "-l <n>: Set Lens. h for list of lenses"
-    print "-f <n>: Set Films and ISO. h for list of films"
-    print "-i <n>: Override Film ISO"
-    print "-d <n>: Date format: YYYY:MM:DD"
-    print "-t <n>: Time format: HH:MM (increment MM for multiple files)"
-    print "-a <n>: Aperture"
+    print("photo-exif.py [-c <n>|h] [-l <n>|h] [-f <n>|h] <files>")
+    print("Munge exif data from photos, mostly scanned negatives")
+    print("-c <n>: Set Camera Model. h for list of cameras")
+    print("-l <n>: Set Lens. h for list of lenses")
+    print("-f <n>: Set Films and ISO. h for list of films")
+    print("-i <n>: Override Film ISO")
+    print("-d <n>: Date format: YYYY:MM:DD")
+    print("-t <n>: Time format: HH:MM (increment MM for multiple files)")
+    print("-a <n>: Aperture")
 
 if __name__ == "__main__":
     arglist = "hc:l:f:i:d:t:a:"
@@ -205,5 +205,5 @@ if __name__ == "__main__":
                 minute = 0
 
         cmd = "%s%s '%s'" % (EXIFTOOL, et_opt_cur, infile)
-        print cmd
+        print(cmd)
         subprocess.call(cmd, shell=True)
