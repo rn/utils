@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 """
 Rename files from <prefix><dont care>nnn.<ext> to <replace>-nnn.<ext>
@@ -17,18 +17,30 @@ import os
 def main():
     prefix = sys.argv[1]
     replace = sys.argv[2]
+    reverse = False
+    if len(sys.argv) > 3:
+        reverse = True
 
-    files = os.listdir(".")
+    ofiles = os.listdir(".")
 
+    files = [ f for f in ofiles if f.startswith(prefix) ]
+    files.sort()
+    
+    idx = len(files)
+    
     for orig_name in files:
-        if orig_name.startswith(prefix):
-            name, _, ext = orig_name.rpartition('.')
-            num = name[-3:]
+        name, _, ext = orig_name.rpartition('.')
+        num = name[-3:]
 
-            new_name = "%s-%s.%s" % (replace, num, ext)
+        if reverse:
+            new_name = f'{replace}-{idx:03d}.{ext}'
+        else:
+            new_name = f'{replace}-{num}.{ext}'
 
-            print "rename %s -> %s" % (orig_name, new_name)
-            os.rename(orig_name, new_name)
+        print(f'rename {orig_name} -> {new_name}')
+        os.rename(orig_name, new_name)
+
+        idx = idx - 1
 
 if __name__ == '__main__':
     main()
